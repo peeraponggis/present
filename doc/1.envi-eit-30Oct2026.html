@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: AI & Clean Energy in Environmental Engineering</title>
+    <style>
+        :root {
+            --primary-color: #00796b;
+            --secondary-color: #004d40;
+            --accent-color: #4db6ac;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--secondary-color);
+            padding: 0.5rem;
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        nav button:hover, nav button.active {
+            background-color: var(--accent-color);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: var(--secondary-color);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .flow-box {
+            background: #e0f2f1;
+            padding: 15px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .parameter-card {
+            background: #f8fbfb;
+            border: 1px solid #cfe7e2;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .parameter-card label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        .parameter-card input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary-color);
+        }
+        .parameter-card .value-box {
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: #e0f2f1;
+            border-radius: 6px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 18px 0 24px;
+        }
+        .status-card {
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e0f2f1, #f5faf9);
+            border: 1px solid #bfe0db;
+        }
+        .status-card .label {
+            display: block;
+            color: #4a5a5d;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .status-card strong {
+            font-size: 28px;
+            color: var(--secondary-color);
+        }
+        .process-flow {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(110px, 1fr));
+            gap: 10px;
+            align-items: center;
+            margin: 24px 0;
+            padding: 18px 10px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #f5fbfb, #edf6f6);
+            border: 1px solid #d7eaea;
+        }
+        .process-unit {
+            background: #dff8ff;
+            border: 3px solid #1c7ca8;
+            border-radius: 14px;
+            min-height: 110px;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 700;
+            color: #0f3a46;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .process-unit.active {
+            border-color: #0f8f4b;
+            background: #dcfce7;
+            box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+            transform: translateY(-2px);
+        }
+        .process-unit .unit-title {
+            font-size: 15px;
+            line-height: 1.2;
+        }
+        .process-unit .unit-metric {
+            font-size: 12px;
+            margin-top: 8px;
+            color: #245f68;
+        }
+        .flow-arrow {
+            text-align: center;
+            font-size: 28px;
+            color: #d92d2d;
+            font-weight: bold;
+        }
+        .mini-chart-panel {
+            margin-top: 24px;
+            background: #fff;
+            border: 1px solid #dfeae8;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .insight-box {
+            margin-top: 20px;
+            background: #fffaf0;
+            border-left: 5px solid #f59e0b;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #7a4b00;
+            font-weight: 600;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .process-flow {
+                grid-template-columns: 1fr;
+            }
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ระบบบำบัดน้ำเสียอัจฉริยะพลังงานแสงอาทิตย์ควบคุมด้วย AI</h1>
+        <p>Case Study: AI-Driven Solar-Powered Smart Wastewater Treatment Plant</p>
+    </header>
+
+    <nav>
+        <button class="tab-link active" onclick="openTab(event, 'overview')">ภาพรวมโครงการ</button>
+        <button class="tab-link" onclick="openTab(event, 'flow')">ขั้นตอนและ Flow การทำงาน</button>
+        <button class="tab-link" onclick="openTab(event, 'equipment')">รายการอุปกรณ์และระบบ</button>
+        <button class="tab-link" onclick="openTab(event, 'benefits')">ผลลัพธ์สู่ Net Zero</button>
+    </nav>
+
+    <div class="container">
+        <!-- Tab 1: Overview -->
+        <div id="overview" class="section active">
+            <h2>ภาพรวมกรณีศึกษา (Case Study Overview)</h2>
+            <p><strong>สถานที่อ้างอิง:</strong> ระบบบำบัดน้ำเสียรวมในนิคมอุตสาหกรรม (เทียบเคียงนิคมอุตสาหกรรมอัจฉริยะในไทย และระบบของ Veolia Water)</p>
+            <p><strong>ปัญหาเดิม:</strong> ระบบบำบัดน้ำเสียใช้พลังงานไฟฟ้าสูงมาก (โดยเฉพาะเครื่องเติมอากาศ) การควบคุมใช้วิธีตั้งเวลา (Timer) หรือใช้คนปรับ (Manual) ทำให้บางครั้งเติมอากาศมากเกินไปจนเปลืองไฟ หรือน้อยไปจนน้ำไม่ได้มาตรฐาน และใช้ไฟฟ้าจากสายส่ง (Fossil fuel) 100%</p>
+            <p><strong>การแก้ปัญหา (ตามหัวข้ออบรม):</strong> นำ <b>AI Machine Learning</b> มาทำหน้าที่วิเคราะห์โหลดน้ำเสียขาเข้าแบบ Real-time และสั่งการเครื่องเติมอากาศแบบอัตโนมัติ โดยใช้แหล่งพลังงานจาก <b>Solar Floating (โซล่าเซลล์ลอยน้ำ)</b> ที่ติดตั้งบนบ่อพักน้ำร่วมกับระบบแบตเตอรี่ เพื่อขับเคลื่อนงานวิศวกรรมสิ่งแวดล้อมสู่ <b>Net Zero 2050</b></p>
+        </div>
+
+        <!-- Tab 2: System Flow -->
+        <div id="flow" class="section">
+            <h2>ขั้นตอนและ Flow ของระบบ (System Flow & Process)</h2>
+
+            <div class="parameter-grid">
+                <div class="parameter-card">
+                    <label for="flowRate">อัตราการไหลน้ำเสีย <span id="flowValue">1200</span> m³/d</label>
+                    <input id="flowRate" type="range" min="500" max="3000" step="50" value="1200">
+                    <div class="value-box">Q = <span id="flowText">1200</span> m³/day</div>
+                </div>
+
+                <div class="parameter-card">
+                    <label for="bodInput">ความเข้มข้น BOD <span id="bodValue">220</span> mg/L</label>
+                    <input id="bodInput" type="range" min="80" max="500" step="10" value="220">
+                    <div class="value-box">BOD = <span id="bodText">220</span> mg/L</div>
+                </div>
+
+                <div class="parameter-card">
+                    <label for="doTarget">ค่า DO เป้าหมาย <span id="doTargetValue">2.5</span> mg/L</label>
+                    <input id="doTarget" type="range" min="1" max="4" step="0.1" value="2.5">
+                    <div class="value-box">DO target = <span id="doTargetText">2.5</span> mg/L</div>
+                </div>
+
+                <div class="parameter-card">
+                    <label for="solarInput">แสงอาทิตย์ <span id="solarValue">75</span> %</label>
+                    <input id="solarInput" type="range" min="10" max="100" step="5" value="75">
+                    <div class="value-box">Solar = <span id="solarText">75</span> %</div>
+                </div>
+
+                <div class="parameter-card">
+                    <label for="efficiencyInput">ประสิทธิภาพระบบ <span id="efficiencyValue">84</span> %</label>
+                    <input id="efficiencyInput" type="range" min="50" max="100" step="1" value="84">
+                    <div class="value-box">Efficiency = <span id="efficiencyText">84</span> %</div>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+                <div class="status-card">
+                    <span class="label">ความต้องการอากาศ</span>
+                    <strong id="aerationLoad">38.4</strong>
+                    <div>kW</div>
+                </div>
+                <div class="status-card">
+                    <span class="label">พลังงานจากแสงอาทิตย์</span>
+                    <strong id="solarPower">315</strong>
+                    <div>kWh/day</div>
+                </div>
+                <div class="status-card">
+                    <span class="label">สัดส่วนพลังงานสะอาด</span>
+                    <strong id="cleanShare">82</strong>
+                    <div>%</div>
+                </div>
+                <div class="status-card">
+                    <span class="label">ประสิทธิภาพบำบัด</span>
+                    <strong id="treatmentEfficiency">92</strong>
+                    <div>%</div>
+                </div>
+            </div>
+
+            <div class="process-flow" id="processFlow">
+                <div class="process-unit active" data-stage="1">
+                    <div class="unit-title">Receiving Pond</div>
+                    <div class="unit-metric">Q = <span id="stage1Flow">1200</span> m³/d</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="process-unit active" data-stage="2">
+                    <div class="unit-title">Anaerobic Pond</div>
+                    <div class="unit-metric">BOD = <span id="stage2Bod">220</span></div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="process-unit active" data-stage="3">
+                    <div class="unit-title">Facultative Pond</div>
+                    <div class="unit-metric">DO = <span id="stage3Do">2.5</span> mg/L</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="process-unit active" data-stage="4">
+                    <div class="unit-title">Mixing Tank</div>
+                    <div class="unit-metric">AI control</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="process-unit active" data-stage="5">
+                    <div class="unit-title">Sedimentation</div>
+                    <div class="unit-metric">Settling</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="process-unit active" data-stage="6">
+                    <div class="unit-title">Chlorine Contact</div>
+                    <div class="unit-metric">Disinfection</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="process-unit active" data-stage="7">
+                    <div class="unit-title">Effluent</div>
+                    <div class="unit-metric">Clean water</div>
+                </div>
+            </div>
+
+            <div class="mini-chart-panel">
+                <h3 style="color: #00796b; margin-top: 0;">กราฟจำลองค่า DO (ออกซิเจนละลายน้ำ) แบบ Real-time</h3>
+                <canvas id="sensorChart" width="400" height="150"></canvas>
+            </div>
+
+            <div class="insight-box" id="insightBox">
+                ระบบทำงานในโหมดสมดุล: ค่าพลังงานสะอาดสูงและการเติมอากาศสามารถปรับลดลงได้ตามโหลดจริงเพื่อประหยัดพลังงาน
+            </div>
+
+            <div class="flow-box">
+                <h3>Step 1: การรับน้ำเสียและตรวจวัด (Influent & Sensing)</h3>
+                <p>น้ำเสียไหลเข้าสู่ระบบ เซนเซอร์ IoT ทำการวัดค่า DO, COD, pH, และอัตราการไหล ส่งข้อมูลแบบ Real-time เพื่อให้ AI ทราบสถานะของระบบอย่างต่อเนื่อง</p>
+            </div>
+
+            <div class="flow-box">
+                <h3>Step 2: การประมวลผลด้วย AI (Real-time AI Prediction)</h3>
+                <p>โมเดล AI วิเคราะห์ข้อมูลจากเซนเซอร์ร่วมกับสภาพแสงอาทิตย์และสมดุลของระบบ เพื่อคาดการณ์ความต้องการออกซิเจนและการจัดสรรพลังงานที่เหมาะสม</p>
+            </div>
+
+            <div class="flow-box">
+                <h3>Step 3: การสั่งการอัตโนมัติ (Automated Control)</h3>
+                <p>AI ส่งคำสั่งปรับความเร็วรอบของเครื่องเติมอากาศและปั๊มจ่ายสารเคมีให้ทำงานตามค่าโหลดจริง ลดการสิ้นเปลืองและรักษามาตรฐานน้ำออก</p>
+            </div>
+
+            <div class="flow-box">
+                <h3>Step 4: การบริหารจัดการพลังงาน (Clean Energy Microgrid)</h3>
+                <p>ระบบ EMS ใช้แสงอาทิตย์จาก Solar Floating และแบตเตอรี่เป็นแหล่งพลังงานหลัก โดยสลับไปใช้จากแบตเตอรี่เมื่อแสงอาทิตย์ลดลง เพื่อให้ระบบมีความยั่งยืนและลดคาร์บอน</p>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const flowRate = document.getElementById('flowRate');
+                const bodInput = document.getElementById('bodInput');
+                const doTarget = document.getElementById('doTarget');
+                const solarInput = document.getElementById('solarInput');
+                const efficiencyInput = document.getElementById('efficiencyInput');
+
+                const flowValue = document.getElementById('flowValue');
+                const bodValue = document.getElementById('bodValue');
+                const doTargetValue = document.getElementById('doTargetValue');
+                const solarValue = document.getElementById('solarValue');
+                const efficiencyValue = document.getElementById('efficiencyValue');
+
+                const flowText = document.getElementById('flowText');
+                const bodText = document.getElementById('bodText');
+                const doTargetText = document.getElementById('doTargetText');
+                const solarText = document.getElementById('solarText');
+                const efficiencyText = document.getElementById('efficiencyText');
+
+                const aerationLoad = document.getElementById('aerationLoad');
+                const solarPower = document.getElementById('solarPower');
+                const cleanShare = document.getElementById('cleanShare');
+                const treatmentEfficiency = document.getElementById('treatmentEfficiency');
+                const insightBox = document.getElementById('insightBox');
+
+                const canvas = document.getElementById('sensorChart');
+                const ctx = canvas.getContext('2d');
+                const timeLabels = ['10:00', '10:01', '10:02', '10:03', '10:04', '10:05', '10:06', '10:07', '10:08', '10:09', '10:10', '10:11'];
+
+                function drawSensorChart(dataArray) {
+                    const dpr = window.devicePixelRatio || 1;
+                    const rect = canvas.getBoundingClientRect();
+                    const width = rect.width || 400;
+                    const height = rect.height || 150;
+
+                    canvas.width = width * dpr;
+                    canvas.height = height * dpr;
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                    ctx.clearRect(0, 0, width, height);
+
+                    const margin = { top: 20, right: 20, bottom: 35, left: 38 };
+                    const innerWidth = width - margin.left - margin.right;
+                    const innerHeight = height - margin.top - margin.bottom;
+                    const minY = 0;
+                    const maxY = 5;
+
+                    ctx.strokeStyle = '#d9e5e5';
+                    ctx.lineWidth = 1;
+                    for (let i = 0; i <= 5; i++) {
+                        const y = margin.top + (innerHeight / 5) * i;
+                        ctx.beginPath();
+                        ctx.moveTo(margin.left, y);
+                        ctx.lineTo(width - margin.right, y);
+                        ctx.stroke();
+                    }
+
+                    for (let i = 0; i <= 11; i++) {
+                        const x = margin.left + (innerWidth / 11) * i;
+                        ctx.beginPath();
+                        ctx.moveTo(x, margin.top);
+                        ctx.lineTo(x, height - margin.bottom);
+                        ctx.stroke();
+                    }
+
+                    ctx.fillStyle = '#3d4d4d';
+                    ctx.font = '12px sans-serif';
+                    ctx.textAlign = 'center';
+                    timeLabels.forEach((label, index) => {
+                        const x = margin.left + (innerWidth / (timeLabels.length - 1)) * index;
+                        ctx.fillText(label, x, height - 12);
+                    });
+
+                    ctx.textAlign = 'right';
+                    for (let i = 0; i <= 5; i++) {
+                        const val = minY + ((maxY - minY) / 5) * (5 - i);
+                        const y = margin.top + (innerHeight / 5) * i;
+                        ctx.fillText(val.toFixed(1), margin.left - 8, y + 4);
+                    }
+
+                    ctx.fillStyle = '#2d7d78';
+                    ctx.strokeStyle = '#26a69a';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+
+                    dataArray.forEach((value, index) => {
+                        const x = margin.left + (innerWidth / (dataArray.length - 1)) * index;
+                        const y = margin.top + ((maxY - Number(value)) / (maxY - minY)) * innerHeight;
+                        if (index === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    });
+                    ctx.stroke();
+
+                    ctx.lineTo(width - margin.right, height - margin.bottom);
+                    ctx.lineTo(margin.left, height - margin.bottom);
+                    ctx.closePath();
+                    ctx.fillStyle = 'rgba(38, 166, 154, 0.14)';
+                    ctx.fill();
+
+                    ctx.fillStyle = '#0f3a46';
+                    ctx.font = 'bold 12px sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.fillText('DO (mg/L)', margin.left + 8, margin.top - 6);
+                }
+
+                function updateChartFromParams() {
+                    const q = Number(flowRate.value);
+                    const bod = Number(bodInput.value);
+                    const doSet = Number(doTarget.value);
+                    const solar = Number(solarInput.value);
+                    const eff = Number(efficiencyInput.value);
+                    const data = [];
+
+                    for (let i = 0; i < 12; i++) {
+                        const variation = Math.sin((i + q / 500) / 1.4) * 0.7;
+                        const solarInfluence = ((solar - 50) / 100) * 0.9;
+                        const loadInfluence = ((bod - 200) / 300) * 0.8;
+                        const value = doSet + variation + solarInfluence - loadInfluence * 0.4;
+                        data.push(Math.max(0.8, Math.min(4.8, value)).toFixed(2));
+                    }
+
+                    drawSensorChart(data);
+                }
+
+                function updateProcessValues() {
+                    const q = Number(flowRate.value);
+                    const bod = Number(bodInput.value);
+                    const doSet = Number(doTarget.value);
+                    const solar = Number(solarInput.value);
+                    const eff = Number(efficiencyInput.value);
+
+                    const aeration = ((q / 1000) * (bod / 180) * (doSet / 2.5) * 5.5).toFixed(1);
+                    const solarEnergy = ((q / 1000) * 1.6 * (solar / 100) * (eff / 100) * 30).toFixed(0);
+                    const clean = Math.min(95, Math.max(40, (solar * eff / 100) * 0.95)).toFixed(0);
+                    const treatment = Math.min(98, Math.max(72, 80 + (eff - 60) * 0.34 + (doSet - 1.5) * 12)).toFixed(0);
+
+                    flowValue.textContent = q.toLocaleString();
+                    bodValue.textContent = bod;
+                    doTargetValue.textContent = doSet.toFixed(1);
+                    solarValue.textContent = solar;
+                    efficiencyValue.textContent = eff;
+
+                    flowText.textContent = q.toLocaleString();
+                    bodText.textContent = bod;
+                    doTargetText.textContent = doSet.toFixed(1);
+                    solarText.textContent = solar;
+                    efficiencyText.textContent = eff;
+
+                    aerationLoad.textContent = aeration;
+                    solarPower.textContent = solarEnergy;
+                    cleanShare.textContent = clean;
+                    treatmentEfficiency.textContent = treatment;
+
+                    document.getElementById('stage1Flow').textContent = q.toLocaleString();
+                    document.getElementById('stage2Bod').textContent = bod;
+                    document.getElementById('stage3Do').textContent = doSet.toFixed(1);
+
+                    const stageMap = [
+                        { min: 0, max: 1500, active: true },
+                        { min: 0, max: 260, active: bod > 180 },
+                        { min: 1.5, max: 4.0, active: doSet >= 2.0 },
+                        { min: 0, max: 1000, active: q >= 800 },
+                        { min: 0, max: 100, active: eff >= 70 },
+                        { min: 0, max: 100, active: solar >= 50 },
+                        { min: 0, max: 100, active: treatment >= 85 }
+                    ];
+
+                    document.querySelectorAll('.process-unit').forEach((unit, index) => {
+                        const shouldActive = stageMap[index] ? stageMap[index].active : true;
+                        unit.classList.toggle('active', shouldActive);
+                    });
+
+                    if (solar < 40) {
+                        insightBox.textContent = 'สภาวะแสงอาทิตย์ต่ำ: ระบบจะสลับไปใช้แบตเตอรี่และเพิ่มประสิทธิภาพการเติมอากาศเพื่อคงเสถียรภาพการบำบัด';
+                    } else if (bod > 350) {
+                        insightBox.textContent = 'โหลดน้ำเสียสูง: AI จะเพิ่มความเร็วรอบเครื่องเติมอากาศและปรับปริมาณสารเคมีเพื่อรักษาระดับ DO ให้สม่ำเสมอ';
+                    } else {
+                        insightBox.textContent = 'ระบบทำงานในโหมดสมดุล: ค่าพลังงานสะอาดสูงและการเติมอากาศสามารถปรับลดลงได้ตามโหลดจริงเพื่อประหยัดพลังงาน';
+                    }
+                }
+
+                [flowRate, bodInput, doTarget, solarInput, efficiencyInput].forEach((input) => {
+                    input.addEventListener('input', () => {
+                        updateProcessValues();
+                        updateChartFromParams();
+                    });
+                });
+
+                updateProcessValues();
+                updateChartFromParams();
+            });
+        </script>
+
+        <!-- Tab 3: Equipment -->
+        <div id="equipment" class="section">
+            <h2>รายการอุปกรณ์ (Equipment List) พร้อมเหตุผลและประโยชน์</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>รายการอุปกรณ์ / ระบบ</th>
+                        <th>เหตุผลในการเลือกใช้</th>
+                        <th>ประโยชน์ / ผลลัพธ์ที่ได้</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Smart Water Quality Sensors (IoT)</strong><br>(เซนเซอร์วัดค่า DO, COD, pH, TSS)</td>
+                        <td>เพื่อเก็บข้อมูลคุณภาพน้ำได้ทันทีโดยไม่ต้องรอผล Lab และข้อมูลมีความถี่สูงพอสำหรับป้อนให้ AI ประมวลผล</td>
+                        <td>ทำให้ AI ทราบพฤติกรรมของน้ำเสียตลอด 24 ชม. และตอบสนองต่อการเปลี่ยนแปลงของมลพิษได้ทันท่วงที</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. AI Edge Controller & Cloud SCADA</strong></td>
+                        <td>ต้องการระบบควบคุมที่สามารถรัน Machine Learning Model ได้ที่หน้างาน (Edge) เพื่อลดความหน่วง (Latency) ในการสั่งการ</td>
+                        <td>ลดภาระการทำงานของพนักงาน (Operator) เพิ่มความแม่นยำในการเดินระบบแบบ Real-time ขจัดปัญหา Human Error</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. VFD (Variable Frequency Drive) Blowers</strong><br>(เครื่องเติมอากาศแบบปรับรอบได้)</td>
+                        <td>เครื่องเติมอากาศแบบเดิมเป็นแบบ Fix Speed กินไฟคงที่ VFD ถูกเลือกมาเพื่อให้ AI สามารถสั่งหรี่หรือเร่งรอบมอเตอร์ได้ตามต้องการ</td>
+                        <td><strong>ประหยัดพลังงานไฟฟ้าในระบบบำบัดน้ำเสียได้ถึง 30-40%</strong> ป้องกันปัญหาการเติมอากาศเกินความจำเป็น (Over-aeration)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Floating Solar PV + BESS</strong><br>(โซล่าเซลล์ทุ่นลอยน้ำ และแบตเตอรี่)</td>
+                        <td>พื้นที่บ่อบำบัดน้ำเสียมีพื้นที่ผิวน้ำว่างเปล่าจำนวนมาก เหมาะแก่การวางทุ่นโซล่าเซลล์เพื่อผลิตไฟฟ้าใช้เองโดยไม่เสียพื้นที่ดิน</td>
+                        <td>ลดต้นทุนค่าไฟฟ้าลงอย่างมหาศาล และเป็นแหล่งพลังงานสะอาด (Clean Energy) ที่ช่วยลด Carbon Footprint ของโรงงานโดยตรง</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Automated Dosing Pumps</strong><br>(ปั๊มจ่ายสารเคมีอัตโนมัติ)</td>
+                        <td>เพื่อรับคำสั่งจาก AI ในการจ่ายสารเคมี (เช่น คลอรีนฆ่าเชื้อ หรือ โพลิเมอร์ตะกอน) ตามปริมาณน้ำเสียจริงแบบ Real-time</td>
+                        <td>ประหยัดค่าสารเคมีได้ 15-20% ลดการตกค้างของสารเคมีในสิ่งแวดล้อม และรักษาสมดุลของระบบนิเวศในแหล่งน้ำรับน้ำทิ้ง</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab 4: Benefits -->
+        <div id="benefits" class="section">
+            <h2>การบรรลุเป้าหมาย Net Zero 2050 (Impact towards Net Zero)</h2>
+            <p>จากการประยุกต์ใช้โมเดล <b>AI + พลังงานสะอาด</b> ในงานวิศวกรรมสิ่งแวดล้อมตามกรณีศึกษานี้ ก่อให้เกิดผลลัพธ์ที่เป็นรูปธรรมดังนี้:</p>
+            <ul>
+                <li><strong>ลดการปล่อยก๊าซเรือนกระจก (Decarbonization):</strong> การเปลี่ยนมาใช้ไฟจากระบบ Solar Microgrid ช่วยลด Scope 2 Emissions (การปล่อยก๊าซเรือนกระจกทางอ้อมจากการซื้อพลังงาน) ได้มากกว่า 80%</li>
+                <li><strong>ลดการปล่อยก๊าซมีเทน (CH4):</strong> การที่ AI ควบคุมปริมาณออกซิเจนในบ่อเติมอากาศได้อย่างสมดุล ช่วยป้องกันสภาวะไร้ออกซิเจน (Anaerobic condition) ที่เป็นสาเหตุของการเกิดก๊าซมีเทนและก๊าซไข่เน่า (H2S)</li>
+                <li><strong>ความคุ้มค่าทางเศรษฐศาสตร์ (ROI):</strong> ระยะเวลาคืนทุน (Payback Period) ของการติดตั้ง VFD และ AI ควบคุมระบบอยู่ที่ประมาณ 2-3 ปี และจุดคุ้มทุนของ Solar Cells อยู่ที่ประมาณ 5 ปี ถือเป็นการลงทุนด้านวิศวกรรมที่คุ้มค่าสูงสุด</li>
+                <li><strong>Resilience & Adaptation:</strong> ระบบมีความยืดหยุ่นสูง สามารถปรับตัวรับมือกับสภาพภูมิอากาศที่เปลี่ยนแปลง (เช่น ฝนตกหนักทำให้น้ำเจือจาง หรือภัยแล้งทำให้น้ำเสียเข้มข้น) AI สามารถปรับสมการการเดินเครื่องได้เองตลอดเวลา</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, sectionName) {
+            // Hide all sections
+            var i, sections, tablinks;
+            sections = document.getElementsByClassName("section");
+            for (i = 0; i < sections.length; i++) {
+                sections[i].style.display = "none";
+                sections[i].classList.remove("active");
+            }
+
+            // Remove active class from all buttons
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(sectionName).style.display = "block";
+            document.getElementById(sectionName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>

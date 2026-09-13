@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Insights | AI & Environment Energy Geo GIS</title>
+
+  <style>
+    :root {
+      --navy: #111a2d;
+      --navy-light: #202c44;
+      --navy-hover: #34435d;
+      --blue: #67c4ff;
+      --blue-soft: #e7f4ff;
+      --text: #10203a;
+      --muted: #91a0b7;
+      --line: #dfe7f1;
+      --page: #f6f8fc;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, "Noto Sans Thai", Tahoma, sans-serif;
+      background: var(--page);
+      color: var(--text);
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 292px minmax(0, 1fr);
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--navy);
+      color: var(--white);
+      border-right: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .brand {
+      padding: 30px 38px 26px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .brand h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 1.62rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .brand p {
+      margin: 10px 0 0;
+      color: #a8b3c7;
+      font-size: 0.95rem;
+    }
+
+    .menu-label {
+      padding: 15px 18px 9px;
+      color: #8492a9;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .document-menu {
+      overflow-y: auto;
+      padding-bottom: 16px;
+    }
+
+    .document-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      width: 100%;
+      min-height: 59px;
+      padding: 13px 20px 13px 16px;
+      border: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      background: transparent;
+      color: #edf3ff;
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.45;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .document-link:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .document-link.active {
+      background: var(--navy-hover);
+      color: var(--blue);
+    }
+
+    .document-link.active::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      background: var(--blue);
+      content: "";
+    }
+
+    .menu-dot {
+      flex: 0 0 auto;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #94a3ba;
+    }
+
+    .document-link.active .menu-dot {
+      background: var(--blue);
+      box-shadow: 0 0 12px rgba(103, 196, 255, 0.9);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #8190a7;
+      font-size: 0.78rem;
+    }
+
+    /* Main area */
+    .content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      background: var(--white);
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 32px 54px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .title-group {
+      min-width: 0;
+    }
+
+    .content-header h2 {
+      margin: 0;
+      padding-left: 16px;
+      border-left: 5px solid var(--blue);
+      font-size: clamp(1.5rem, 2.3vw, 2.35rem);
+      line-height: 1.25;
+    }
+
+    .file-status {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: #2f6ead;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .file-status::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #53b67a;
+      content: "";
+    }
+
+    .viewer-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      padding: 28px 54px;
+      background: #f8fafc;
+    }
+
+    .viewer {
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 28px rgba(20, 42, 72, 0.08);
+    }
+
+    .loading {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      display: none;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(17, 26, 45, 0.86);
+      color: white;
+      font-size: 0.9rem;
+      transform: translate(-50%, -50%);
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    /* Mobile */
+    @media (max-width: 800px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        display: block;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        min-height: auto;
+      }
+
+      .brand {
+        padding: 20px 22px;
+      }
+
+      .document-menu {
+        display: flex;
+        overflow-x: auto;
+        padding: 0;
+      }
+
+      .menu-label,
+      .sidebar-footer {
+        display: none;
+      }
+
+      .document-link {
+        flex: 0 0 220px;
+        min-height: 66px;
+        border-top: 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.85rem;
+      }
+
+      .content {
+        min-height: calc(100vh - 175px);
+      }
+
+      .content-header {
+        padding: 22px;
+      }
+
+      .file-status {
+        display: none;
+      }
+
+      .viewer-wrap {
+        height: calc(100vh - 265px);
+        min-height: 500px;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>TECH INSIGHTS</h1>
+        <p>AI & Environment Energy Geo GIS</p>
+      </div>
+
+      <div class="menu-label">Document Library</div>
+
+      <nav class="document-menu" id="documentMenu" aria-label="รายการเอกสาร">
+        <!-- JavaScript จะสร้างเมนูในส่วนนี้ -->
+      </nav>
+
+      <div class="sidebar-footer">
+        © 2025 Tech Insights
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="content-header">
+        <div class="title-group">
+          <h2 id="documentTitle">กำลังโหลดเอกสาร...</h2>
+        </div>
+        <div class="file-status" id="fileStatus">HTML Document</div>
+      </header>
+
+      <section class="viewer-wrap">
+        <div class="loading" id="loading">กำลังเปิดเอกสาร...</div>
+
+        <!-- iframe ใช้แสดงไฟล์ HTML และ PDF ในหน้าต่างขวามือ -->
+        <iframe
+          class="viewer"
+          id="documentViewer"
+          title="Document Viewer"
+          src=""
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+        ></iframe>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /*
+      เปลี่ยน file ให้ตรงกับตำแหน่งไฟล์ของคุณ
+
+      ตัวอย่างโครงสร้าง:
+      project/
+      ├─ index.html
+      └─ docs/
+         ├─ solar-5-dimensions.html
+         ├─ installation-system.html
+         ├─ engineering-design.html
+         ├─ parameter-estimation.html
+         └─ ai-webapp-architecture.html
+    */
+
+    const documents = [
+      {
+        title: "1. Envi. to day",
+        file: "docs/1.envi-eit-30Oct2026.html",
+        type: "HTML Document"
+      },
+      {
+        title: "2. Envi. Thailand",
+        file: "docs/2.solar energy potential based on satellite data.html,
+        type: "HTML Document"
+      },
+      {
+        title: "3. AI Systems",
+        file: "docs/3.ai_systems2.html",
+        type: "HTML Document"
+      },
+      {
+        title: "4. .............",
+        file: "docs/.........",
+        type: "HTML Document"
+      },
+      {
+        title: "5. ..............",
+        file: "docs/.........",
+        type: "HTML Document"
+      }
+
+      /*
+      หากเป็น PDF ใช้รูปแบบนี้:
+      {
+        title: "คู่มือการติดตั้งระบบ",
+        file: "docs/installation-manual.pdf",
+        type: "PDF Document"
+      }
+      */
+    ];
+
+    const menu = document.getElementById("documentMenu");
+    const viewer = document.getElementById("documentViewer");
+    const title = document.getElementById("documentTitle");
+    const status = document.getElementById("fileStatus");
+    const loading = document.getElementById("loading");
+
+    function openDocument(documentData, button) {
+      // ป้องกันการส่ง URL ภายนอกโดยใช้ไฟล์จากรายการ documents เท่านั้น
+      title.textContent = documentData.title;
+      status.textContent = documentData.type;
+      loading.classList.add("show");
+
+      document.querySelectorAll(".document-link").forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-current", "false");
+      });
+
+      button.classList.add("active");
+      button.setAttribute("aria-current", "page");
+
+      viewer.src = documentData.file;
+    }
+
+    documents.forEach((documentData, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "document-link";
+      button.innerHTML = `
+        <span class="menu-dot" aria-hidden="true"></span>
+        <span>${documentData.title}</span>
+      `;
+
+      button.addEventListener("click", () => {
+        openDocument(documentData, button);
+      });
+
+      menu.appendChild(button);
+
+      // เปิดเอกสารแรกอัตโนมัติ
+      if (index === 0) {
+        openDocument(documentData, button);
+      }
+    });
+
+    viewer.addEventListener("load", () => {
+      loading.classList.remove("show");
+    });
+  </script>
+</body>
+</html>

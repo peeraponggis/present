@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08111f" />
+  <title>AI Technology Timeline | Engineering Briefing</title>
+
+  <style>
+    :root {
+      --bg: #08111f;
+      --bg-soft: #0d1a2d;
+      --panel: rgba(18, 33, 55, 0.84);
+      --line: rgba(148, 163, 184, 0.22);
+      --text: #f1f5f9;
+      --muted: #a8b5c8;
+      --cyan: #22d3ee;
+      --violet: #8b5cf6;
+      --lime: #a3e635;
+      --orange: #fbbf24;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "IBM Plex Sans Thai", "Noto Sans Thai", "Sarabun", system-ui, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.3;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.055) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      height: 74px;
+      flex: 0 0 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(16px);
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 12px;
+      height: 12px;
+      background: var(--cyan);
+      box-shadow: 0 0 18px var(--cyan);
+      transform: rotate(45deg);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: color-mix(in srgb, var(--panel) 74%, transparent);
+    }
+
+    .theme-btn {
+      min-width: auto;
+      height: 27px;
+      padding: 0 7px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.58rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .theme-btn:hover,
+    .theme-btn.active {
+      border-color: var(--cyan);
+      background: color-mix(in srgb, var(--cyan) 14%, transparent);
+      color: var(--cyan);
+    }
+
+    .slide-count {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    main {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: clamp(28px, 4.3vw, 62px) 7vw 110px;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(56px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      scrollbar-width: thin;
+      scrollbar-color: var(--cyan) transparent;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-56px);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--cyan);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 30px;
+      height: 2px;
+      background: currentColor;
+    }
+
+    h1 {
+      max-width: 1100px;
+      margin: 16px 0;
+      font-size: clamp(2rem, 4.1vw, 4.3rem);
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+    }
+
+    h3, p { margin-top: 0; }
+
+    .accent-cyan { color: var(--cyan); }
+    .accent-violet { color: var(--violet); }
+    .accent-lime { color: var(--lime); }
+    .accent-orange { color: var(--orange); }
+
+    .lead {
+      max-width: 940px;
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.35vw, 1.17rem);
+      line-height: 1.72;
+    }
+
+    .tag-row,
+    .examples,
+    .system-examples,
+    .forecast-examples,
+    .model-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 13px;
+    }
+
+    .tag-row span,
+    .examples span,
+    .system-examples span,
+    .forecast-examples span,
+    .model-tags span {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 7px;
+      border-radius: 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.61rem;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    /* Slide 1 */
+    .timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 22px;
+      right: 7%;
+      left: 7%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      opacity: 0.75;
+    }
+
+    .era {
+      position: relative;
+      padding-top: 54px;
+    }
+
+    .era-dot {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      width: 21px;
+      height: 21px;
+      border: 4px solid var(--bg);
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 2px var(--cyan), 0 0 20px color-mix(in srgb, var(--cyan) 56%, transparent);
+    }
+
+    .era:nth-child(3) .era-dot,
+    .era:nth-child(4) .era-dot {
+      background: var(--violet);
+      box-shadow: 0 0 0 2px var(--violet), 0 0 20px color-mix(in srgb, var(--violet) 56%, transparent);
+    }
+
+    .era-year,
+    .arch-number,
+    .forecast-index {
+      color: var(--cyan);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .era:nth-child(3) .era-year,
+    .era:nth-child(4) .era-year,
+    .arch-number {
+      color: var(--violet);
+    }
+
+    .era h3 {
+      margin: 8px 0;
+      font-size: 1.08rem;
+    }
+
+    .era p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.58;
+    }
+
+    .examples span {
+      border: 1px solid color-mix(in srgb, var(--cyan) 35%, transparent);
+      background: color-mix(in srgb, var(--cyan) 9%, transparent);
+      color: color-mix(in srgb, var(--cyan) 70%, white);
+    }
+
+    .era:nth-child(3) .examples span,
+    .era:nth-child(4) .examples span {
+      border-color: color-mix(in srgb, var(--violet) 38%, transparent);
+      background: color-mix(in srgb, var(--violet) 10%, transparent);
+      color: color-mix(in srgb, var(--violet) 56%, white);
+    }
+
+    .quote {
+      margin-top: 34px;
+      padding: 17px 20px;
+      border-left: 3px solid var(--cyan);
+      background: linear-gradient(90deg, color-mix(in srgb, var(--cyan) 10%, transparent), transparent);
+      color: color-mix(in srgb, var(--cyan) 64%, white);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Slide 2 */
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 32px;
+    }
+
+    .arch-card,
+    .capabilities,
+    .requirements,
+    .usecase-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .arch-card {
+      position: relative;
+      min-height: 210px;
+      padding: 21px;
+    }
+
+    .arch-card:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -27px;
+      z-index: 2;
+      color: var(--cyan);
+      font-size: 1.5rem;
+      transform: translateY(-50%);
+    }
+
+    .arch-card h3 {
+      margin: 12px 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .arch-card p {
+      color: var(--muted);
+      font-size: 0.87rem;
+      line-height: 1.58;
+    }
+
+    .system-examples span,
+    .model-tags span {
+      border: 1px solid color-mix(in srgb, var(--violet) 36%, transparent);
+      background: color-mix(in srgb, var(--violet) 10%, transparent);
+      color: color-mix(in srgb, var(--violet) 58%, white);
+    }
+
+    .model-tags span.open {
+      border-color: color-mix(in srgb, var(--lime) 38%, transparent);
+      background: color-mix(in srgb, var(--lime) 8%, transparent);
+      color: color-mix(in srgb, var(--lime) 60%, white);
+    }
+
+    .model-tags span.image {
+      border-color: color-mix(in srgb, var(--orange) 40%, transparent);
+      background: color-mix(in srgb, var(--orange) 9%, transparent);
+      color: color-mix(in srgb, var(--orange) 62%, white);
+    }
+
+    .engineering-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .capabilities,
+    .requirements {
+      padding: 21px;
+    }
+
+    .panel-title {
+      margin-bottom: 14px;
+      font-size: 1rem;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 11px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-list li {
+      position: relative;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.52;
+    }
+
+    .feature-list li::before {
+      content: "◆";
+      position: absolute;
+      top: 3px;
+      left: 0;
+      color: var(--cyan);
+      font-size: 0.65rem;
+    }
+
+    .feature-list strong { color: var(--text); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    th, td {
+      padding: 9px 7px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--violet);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    td { color: var(--muted); }
+    td:first-child { color: var(--text); font-weight: 700; }
+
+    /* Slide 3 */
+    .forecast-label {
+      display: inline-flex;
+      padding: 7px 11px;
+      border: 1px solid color-mix(in srgb, var(--lime) 46%, transparent);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--lime) 8%, transparent);
+      color: var(--lime);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .forecast-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 25px;
+    }
+
+    .forecast-card {
+      min-height: 335px;
+      padding: 19px;
+      border: 1px solid color-mix(in srgb, var(--lime) 25%, transparent);
+      border-radius: 14px;
+      background: linear-gradient(160deg, color-mix(in srgb, var(--lime) 9%, transparent), var(--panel) 45%);
+      box-shadow: var(--shadow);
+    }
+
+    .forecast-card.agi-card {
+      border-color: color-mix(in srgb, var(--orange) 45%, transparent);
+      background: linear-gradient(160deg, color-mix(in srgb, var(--orange) 15%, transparent), var(--panel) 45%);
+    }
+
+    .forecast-index {
+      color: var(--lime);
+      font-size: 1.08rem;
+    }
+
+    .agi-card .forecast-index { color: var(--orange); }
+
+    .forecast-card h3 {
+      margin: 13px 0 9px;
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    .forecast-card ul {
+      margin: 0;
+      padding-left: 17px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .forecast-card li + li { margin-top: 6px; }
+
+    .forecast-examples span {
+      border: 1px solid color-mix(in srgb, var(--lime) 36%, transparent);
+      background: color-mix(in srgb, var(--lime) 8%, transparent);
+      color: color-mix(in srgb, var(--lime) 62%, white);
+      font-size: 0.56rem;
+    }
+
+    .agi-card .forecast-examples span {
+      border-color: color-mix(in srgb, var(--orange) 42%, transparent);
+      background: color-mix(in srgb, var(--orange) 9%, transparent);
+      color: color-mix(in srgb, var(--orange) 62%, white);
+    }
+
+    .agi-note {
+      margin-top: 22px;
+      padding: 14px 19px;
+      border-left: 3px solid var(--orange);
+      background: linear-gradient(90deg, color-mix(in srgb, var(--orange) 11%, transparent), transparent);
+      color: color-mix(in srgb, var(--orange) 55%, white);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .closing {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      margin-top: 17px;
+      padding: 17px 21px;
+      border: 1px solid color-mix(in srgb, var(--lime) 36%, transparent);
+      border-radius: 13px;
+      background: color-mix(in srgb, var(--lime) 8%, transparent);
+    }
+
+    .closing-year {
+      color: var(--lime);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .closing p {
+      margin: 0;
+      color: color-mix(in srgb, var(--lime) 55%, white);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    /* Slide 4 */
+    .selection-principle {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 21px 0;
+    }
+
+    .principle {
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--panel) 76%, transparent);
+    }
+
+    .principle strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--cyan);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.73rem;
+    }
+
+    .principle span {
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.42;
+    }
+
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .usecase-card {
+      min-height: 235px;
+      padding: 19px;
+    }
+
+    .usecase-icon {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      margin-bottom: 12px;
+      border: 1px solid color-mix(in srgb, var(--cyan) 42%, transparent);
+      border-radius: 8px;
+      place-items: center;
+      background: color-mix(in srgb, var(--cyan) 9%, transparent);
+      color: var(--cyan);
+      font-family: ui-monospace, monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .usecase-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    .usecase-card p {
+      min-height: 43px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .recommendation {
+      margin-top: 12px;
+      color: color-mix(in srgb, var(--text) 85%, var(--muted));
+      font-size: 0.75rem;
+      line-height: 1.48;
+    }
+
+    .recommendation strong { color: var(--cyan); }
+
+    /* Speaker notes */
+    .notes-toggle {
+      position: fixed;
+      right: 5vw;
+      bottom: 87px;
+      z-index: 15;
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid color-mix(in srgb, var(--cyan) 36%, transparent);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      color: var(--cyan);
+      box-shadow: var(--shadow);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .speaker-notes {
+      display: none;
+      max-width: 1080px;
+      margin-top: 24px;
+      padding: 20px 22px;
+      border: 1px solid color-mix(in srgb, var(--cyan) 32%, transparent);
+      border-radius: 14px;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 10%, transparent), var(--panel) 48%);
+      box-shadow: var(--shadow);
+    }
+
+    .speaker-notes.open {
+      display: block;
+      animation: reveal 0.25s ease;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notes-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .notes-title {
+      margin: 0;
+      color: var(--cyan);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .time-badge {
+      padding: 4px 8px;
+      border: 1px solid color-mix(in srgb, var(--cyan) 33%, transparent);
+      border-radius: 999px;
+      color: color-mix(in srgb, var(--cyan) 65%, white);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.67rem;
+      white-space: nowrap;
+    }
+
+    .speaker-notes p {
+      margin-bottom: 9px;
+      color: color-mix(in srgb, var(--text) 90%, var(--cyan));
+      font-size: 0.9rem;
+      line-height: 1.64;
+    }
+
+    .speaker-notes p:last-child { margin-bottom: 0; }
+
+    /* Footer */
+    footer {
+      height: 74px;
+      flex: 0 0 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      backdrop-filter: blur(16px);
+      z-index: 10;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.77rem;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button {
+      min-width: 40px;
+      height: 37px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      transition: 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.35;
+    }
+
+    .home-btn,
+    .print-btn {
+      border-color: color-mix(in srgb, var(--cyan) 38%, transparent);
+      color: var(--cyan);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .print-btn {
+      border-color: color-mix(in srgb, var(--orange) 42%, transparent);
+      color: var(--orange);
+    }
+
+    .progress-track {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 20;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .progress-bar {
+      width: 25%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--lime), var(--orange));
+      transition: width 0.35s ease;
+    }
+
+    /* Theme 1: Engineering */
+    body[data-theme="engineering"] {
+      --bg: #08111f;
+      --bg-soft: #0d1a2d;
+      --panel: rgba(18, 33, 55, 0.84);
+      --line: rgba(148, 163, 184, 0.22);
+      --text: #f1f5f9;
+      --muted: #a8b5c8;
+      --cyan: #22d3ee;
+      --violet: #8b5cf6;
+      --lime: #a3e635;
+      --orange: #fbbf24;
+    }
+
+    /* Theme 2: Corporate */
+    body[data-theme="corporate"] {
+      --bg: #071b33;
+      --bg-soft: #0a2948;
+      --panel: rgba(13, 47, 78, 0.88);
+      --line: rgba(147, 197, 253, 0.25);
+      --text: #f8fbff;
+      --muted: #b2c7df;
+      --cyan: #38bdf8;
+      --violet: #60a5fa;
+      --lime: #4ade80;
+      --orange: #facc15;
+    }
+
+    /* Theme 3: Neon */
+    body[data-theme="neon"] {
+      --bg: #10051d;
+      --bg-soft: #1c0b34;
+      --panel: rgba(36, 12, 62, 0.88);
+      --line: rgba(244, 114, 182, 0.28);
+      --text: #fff7fe;
+      --muted: #d5b8e2;
+      --cyan: #2dd4bf;
+      --violet: #c084fc;
+      --lime: #d9f99d;
+      --orange: #fb7185;
+    }
+
+    /* Theme 4: Light */
+    body[data-theme="light"] {
+      --bg: #f4f8fc;
+      --bg-soft: #e8f0f8;
+      --panel: rgba(255, 255, 255, 0.93);
+      --line: rgba(51, 65, 85, 0.18);
+      --text: #122033;
+      --muted: #52657a;
+      --cyan: #0284c7;
+      --violet: #6d28d9;
+      --lime: #4d7c0f;
+      --orange: #b45309;
+      --shadow: 0 14px 36px rgba(30, 41, 59, 0.12);
+    }
+
+    body[data-theme="light"]::before { opacity: 0.12; }
+
+    /* Theme 5: Executive */
+    body[data-theme="executive"] {
+      --bg: #14120d;
+      --bg-soft: #201c13;
+      --panel: rgba(40, 34, 21, 0.9);
+      --line: rgba(214, 181, 98, 0.28);
+      --text: #fffbea;
+      --muted: #d5c9a8;
+      --cyan: #e5c36a;
+      --violet: #c9a84c;
+      --lime: #b8d66a;
+      --orange: #f4b942;
+    }
+
+    @media (max-width: 1280px) {
+      .forecast-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 1050px) {
+      .timeline,
+      .architecture,
+      .selection-principle { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      .timeline::before,
+      .arch-card:not(:last-child)::after { display: none; }
+
+      .engineering-grid { grid-template-columns: 1fr; }
+      .usecase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      header, footer { padding: 0 20px; }
+      .slide { padding: 28px 24px 110px; }
+
+      .brand { font-size: 0.61rem; }
+      .header-actions { gap: 8px; }
+      .slide-count { display: none; }
+
+      .theme-switcher {
+        max-width: 220px;
+        overflow-x: auto;
+      }
+
+      .theme-btn { padding: 0 5px; font-size: 0.52rem; }
+
+      .timeline,
+      .architecture,
+      .forecast-grid,
+      .selection-principle,
+      .usecase-grid { grid-template-columns: 1fr; }
+
+      .hint { display: none; }
+      .closing { grid-template-columns: 1fr; gap: 7px; }
+
+      .home-btn,
+      .print-btn {
+        min-width: 37px;
+        padding: 0 8px;
+        font-size: 0;
+      }
+
+      .home-btn::before { content: "⌂"; font-size: 1rem; }
+      .print-btn::before { content: "PDF"; font-size: 0.65rem; }
+    }
+
+    /* =====================================================
+       PRINT / SAVE AS PDF
+       - 1 slide ต่อ 1 หน้า A4 landscape
+       - ซ่อนปุ่มควบคุม, notes และ animation
+    ====================================================== */
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+
+    @media print {
+      html, body {
+        width: 100%;
+        height: auto;
+        overflow: visible !important;
+        background: var(--bg) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      body::before,
+      header,
+      footer,
+      .notes-toggle,
+      .progress-track,
+      .speaker-notes {
+        display: none !important;
+      }
+
+      .app,
+      main {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .slide {
+        position: relative !important;
+        inset: auto !important;
+        display: block !important;
+        width: 100% !important;
+        min-height: 190mm !important;
+        height: 190mm !important;
+        padding: 12mm 13mm !important;
+        overflow: hidden !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        break-after: page;
+        page-break-after: always;
+        background: var(--bg) !important;
+      }
+
+      .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+
+      h1 {
+        margin: 8px 0 10px !important;
+        font-size: 30pt !important;
+      }
+
+      .lead {
+        margin-bottom: 14px !important;
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+      }
+
+      .timeline {
+        margin-top: 20px !important;
+        gap: 13px !important;
+      }
+
+      .era {
+        padding-top: 42px !important;
+      }
+
+      .era h3,
+      .arch-card h3,
+      .forecast-card h3,
+      .usecase-card h3 {
+        font-size: 11pt !important;
+      }
+
+      .era p,
+      .arch-card p,
+      .forecast-card ul,
+      .usecase-card p,
+      .recommendation,
+      .feature-list li,
+      table {
+        font-size: 8.5pt !important;
+      }
+
+      .architecture,
+      .forecast-grid,
+      .usecase-grid {
+        gap: 9px !important;
+      }
+
+      .arch-card {
+        min-height: 125px !important;
+        padding: 13px !important;
+      }
+
+      .forecast-card {
+        min-height: 230px !important;
+        padding: 12px !important;
+      }
+
+      .usecase-card {
+        min-height: 160px !important;
+        padding: 13px !important;
+      }
+
+      .selection-principle {
+        margin: 13px 0 !important;
+        gap: 8px !important;
+      }
+
+      .principle {
+        padding: 9px 11px !important;
+      }
+
+      .quote,
+      .agi-note,
+      .closing {
+        margin-top: 14px !important;
+        padding: 10px 13px !important;
+        font-size: 9pt !important;
+      }
+
+      .examples,
+      .system-examples,
+      .forecast-examples,
+      .model-tags {
+        gap: 4px !important;
+        margin-top: 7px !important;
+      }
+
+      .examples span,
+      .system-examples span,
+      .forecast-examples span,
+      .model-tags span {
+        padding: 3px 5px !important;
+        font-size: 6.5pt !important;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="engineering">
+  <div class="app">
+    <header>
+      <div class="brand">
+        <span class="brand-mark"></span>
+        Engineering Briefing / AI Systems
+      </div>
+
+      <div class="header-actions">
+        <div class="theme-switcher" aria-label="เลือกธีมการนำเสนอ">
+          <button class="theme-btn active" data-theme="engineering" title="Engineering Dark">ENG</button>
+          <button class="theme-btn" data-theme="corporate" title="Corporate Blue">CORP</button>
+          <button class="theme-btn" data-theme="neon" title="Neon Future">NEON</button>
+          <button class="theme-btn" data-theme="light" title="Light Professional">LIGHT</button>
+          <button class="theme-btn" data-theme="executive" title="Executive Gold">EXEC</button>
+        </div>
+
+        <div class="slide-count">
+          SLIDE <span id="currentSlide">01</span> / 04
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Slide 1 -->
+      <section class="slide active" data-slide="0">
+        <div class="eyebrow">01 / Historical Context</div>
+
+        <h1>
+          AI Evolution:<br />
+          From <span class="accent-cyan">Explicit Rules</span> to
+          <span class="accent-violet">Learned Intelligence</span>
+        </h1>
+
+        <p class="lead">
+          จุดเปลี่ยนสำคัญของ AI ไม่ได้เกิดจากโมเดลเพียงอย่างเดียว
+          แต่คือการเปลี่ยน abstraction ที่วิศวกรใช้สร้างระบบ:
+          จากกฎที่มนุษย์กำหนด ไปสู่โมเดลทั่วไปที่เรียนรู้จากข้อมูลและต่อยอดสู่หลายงานได้
+        </p>
+
+        <div class="timeline">
+          <article class="era">
+            <span class="era-dot"></span>
+            <div class="era-year">1956–1990s</div>
+            <h3>Symbolic AI</h3>
+            <p>Expert systems, logic และ inference engine ที่ขับเคลื่อนด้วยกฎ IF–THEN และฐานความรู้ที่มนุษย์สร้างขึ้น</p>
+            <div class="examples">
+              <span>MYCIN</span>
+              <span>DENDRAL</span>
+              <span>XCON</span>
+            </div>
+          </article>
+
+          <article class="era">
+            <span class="era-dot"></span>
+            <div class="era-year">1990s–2011</div>
+            <h3>Statistical ML</h3>
+            <p>Feature engineering, supervised learning และการใช้ข้อมูลพฤติกรรมเพื่อสร้างโมเดลคาดการณ์และจัดประเภทข้อมูล</p>
+            <div class="examples">
+              <span>Gmail Spam Filter</span>
+              <span>Netflix Recommender</span>
+              <span>Google Translate</span>
+            </div>
+          </article>
+
+          <article class="era">
+            <span class="era-dot"></span>
+            <div class="era-year">2012–2016</div>
+            <h3>Deep Learning</h3>
+            <p>GPU acceleration และ end-to-end representation learning สำหรับงานภาพ เสียง ภาษา และการตัดสินใจที่ซับซ้อน</p>
+            <div class="examples">
+              <span>AlexNet</span>
+              <span>AlphaGo</span>
+              <span>Siri / Alexa ASR</span>
+            </div>
+          </article>
+
+          <article class="era">
+            <span class="era-dot"></span>
+            <div class="era-year">2017–2022</div>
+            <h3>Foundation Models</h3>
+            <p>Transformer, pre-training และโมเดลขนาดใหญ่ที่ปรับใช้ต่อกับงานภาษา การเขียนโค้ด และการค้นหาความรู้ได้</p>
+            <div class="examples">
+              <span>BERT</span>
+              <span>GPT-3</span>
+              <span>GitHub Copilot</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="quote">
+          CORE SHIFT — Rules → Features → Representations → General-purpose Models
+        </div>
+
+        <div class="speaker-notes">
+          <div class="notes-header">
+            <h3 class="notes-title">Speaker Notes / Slide 1</h3>
+            <span class="time-badge">~ 45–60 วินาที</span>
+          </div>
+          <p><strong>เปิดเรื่อง:</strong> “ถ้ามองวิวัฒนาการของ AI ในมุมวิศวกรรม เราไม่ได้เปลี่ยนเพียง algorithm แต่เราเปลี่ยนวิธีออกแบบระบบทั้งหมด”</p>
+          <p>ยุคแรกคือการเขียนกฎแบบชัดเจน เช่น MYCIN หรือ XCON ซึ่งตรวจสอบ logic ได้ง่าย แต่ขยายผลยากเมื่อเงื่อนไขมีจำนวนมากขึ้น</p>
+          <p>จากนั้น Machine Learning เปลี่ยนให้ระบบเรียนรู้จากข้อมูล ต่อด้วย Deep Learning และ Transformer ที่ทำให้เกิด foundation model ซึ่งนำไปต่อยอดได้หลายงาน</p>
+          <p><strong>ส่งต่อ:</strong> “วันนี้ AI จึงไม่ใช่แค่โมเดลที่ทำนายผล แต่เริ่มเป็นองค์ประกอบของ workflow ที่ลงมือทำงานร่วมกับระบบองค์กรได้”</p>
+        </div>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide" data-slide="1">
+        <div class="eyebrow">02 / Current State</div>
+
+        <h1>
+          AI in 2026:<br />
+          From Conversation to <span class="accent-violet">Executable Workflows</span>
+        </h1>
+
+        <p class="lead">
+          AI ปัจจุบันไม่ได้มีบทบาทเพียงตอบคำถาม แต่เริ่มเป็นส่วนหนึ่งของระบบงานจริง
+          ที่รับข้อมูลหลายรูปแบบ ใช้เหตุผล เชื่อมต่อเครื่องมือ เรียก API และทำงานภายใต้สิทธิ์ที่กำหนด
+        </p>
+
+        <div class="architecture">
+          <article class="arch-card">
+            <div class="arch-number">01 / INPUT</div>
+            <h3>Input Layer</h3>
+            <p>Text, image, audio, video, document, telemetry และ sensor data</p>
+            <div class="system-examples">
+              <span>OCR Pipeline</span>
+              <span>Computer Vision</span>
+              <span>IoT Telemetry</span>
+            </div>
+          </article>
+
+          <article class="arch-card">
+            <div class="arch-number">02 / INTELLIGENCE</div>
+            <h3>Model Layer</h3>
+            <p>LLM, reasoning, retrieval, memory และ domain-specific models</p>
+            <div class="system-examples">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span>Gemini Family</span>
+            </div>
+          </article>
+
+          <article class="arch-card">
+            <div class="arch-number">03 / ACTION</div>
+            <h3>Execution Layer</h3>
+            <p>API, code execution, database query, enterprise tools และ workflow automation</p>
+            <div class="system-examples">
+              <span>GitHub Copilot</span>
+              <span>ServiceNow</span>
+              <span>Power Automate</span>
+            </div>
+          </article>
+
+          <article class="arch-card">
+            <div class="arch-number">04 / CONTROL</div>
+            <h3>Trust Layer</h3>
+            <p>Guardrails, evaluation, access policy, audit trail และ human approval</p>
+            <div class="system-examples">
+              <span>RBAC</span>
+              <span>Audit Logs</span>
+              <span>Human Approval</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="engineering-grid">
+          <section class="capabilities">
+            <h3 class="panel-title">Capabilities that matter</h3>
+            <ul class="feature-list">
+              <li><strong>Multimodal:</strong> เข้าใจข้อมูลข้อความ ภาพ เสียง วิดีโอ และข้อมูลจากอุปกรณ์</li>
+              <li><strong>Reasoning & Coding:</strong> วิเคราะห์งานหลายขั้น สร้างโค้ด ตรวจสอบโค้ด และจัดทำ technical documentation</li>
+              <li><strong>Agentic Workflow:</strong> วางแผน เรียกใช้เครื่องมือ และส่งต่องานตามเงื่อนไขที่กำหนด</li>
+              <li><strong>RAG Integration:</strong> เชื่อม knowledge base ภายในเพื่อสร้างคำตอบที่มีบริบทขององค์กร</li>
+            </ul>
+          </section>
+
+          <section class="requirements">
+            <h3 class="panel-title">Engineering requirements</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>Design Requirement</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Quality</td>
+                  <td>Evaluation set, benchmark และ regression test</td>
+                </tr>
+                <tr>
+                  <td>Reliability</td>
+                  <td>Trace, retry, fallback และ observability</td>
+                </tr>
+                <tr>
+                  <td>Security</td>
+                  <td>Permission boundary, data policy และ approval gate</td>
+                </tr>
+                <tr>
+                  <td>Cost</td>
+                  <td>Model routing, caching และ compute/token budget</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+
+        <div class="quote">
+          AI VALUE = MODEL CAPABILITY × RELIABLE SYSTEM INTEGRATION
+        </div>
+
+        <div class="speaker-notes">
+          <div class="notes-header">
+            <h3 class="notes-title">Speaker Notes / Slide 2</h3>
+            <span class="time-badge">~ 50–65 วินาที</span>
+          </div>
+          <p><strong>ใจความสำคัญ:</strong> “คุณค่าของ AI ไม่ได้มาจากการเลือกโมเดลที่ฉลาดที่สุดเพียงอย่างเดียว แต่มาจากการออกแบบระบบที่ใช้งานได้จริง”</p>
+          <p>ระบบ AI ที่พร้อมใช้งานต้องมี 4 ชั้น: รับข้อมูล, ประมวลผลด้วยโมเดล, ลงมือทำผ่าน API หรือเครื่องมือ, และชั้นควบคุมความเสี่ยง</p>
+          <p>ตัวอย่างเช่น AI ช่วยวิเคราะห์ ticket ของฝ่าย IT ได้ แต่ก่อนปิด ticket หรือแก้ไขระบบจริง ต้องกำหนดสิทธิ์ มี log ตรวจสอบ และส่งต่อให้คนอนุมัติเมื่อความเสี่ยงสูง</p>
+          <p><strong>ส่งต่อ:</strong> “เมื่อ AI เริ่มทำงานเป็น agent มากขึ้น คำถามต่อไปจึงไม่ใช่ทำได้หรือไม่ แต่คือควบคุมและเชื่อถือได้มากแค่ไหน”</p>
+        </div>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide" data-slide="2">
+        <div class="eyebrow" style="color: var(--lime);">03 / AGI Era & Near-Term Forecast</div>
+
+        <h1>
+          September 2027:<br />
+          <span class="accent-orange">AGI-Era Capability</span> →
+          <span class="accent-lime">Trusted Autonomous Systems</span>
+        </h1>
+
+        <p class="lead">
+          สมมติฐานของสไลด์นี้คือความสามารถระดับ AGI เกิดขึ้นแล้ว:
+          ระบบสามารถใช้เหตุผลและทำงานข้ามโดเมนได้ในระดับสูง
+          ความท้าทายทางวิศวกรรมจึงเปลี่ยนจาก “ทำให้ AI ฉลาดขึ้น”
+          ไปสู่ “ทำให้ AI ทำงานได้อย่างปลอดภัย เชื่อถือได้ ตรวจสอบได้ และหยุดได้”
+        </p>
+
+        <div class="forecast-label">
+          AGI-ERA ASSUMPTION — CAPABILITY ≠ PRODUCTION TRUST
+        </div>
+
+        <div class="forecast-grid">
+          <article class="forecast-card agi-card">
+            <div class="forecast-index">00</div>
+            <h3>AGI-Era Systems</h3>
+            <ul>
+              <li>ทำงานข้ามโดเมน เช่น วิเคราะห์ requirement, เขียนโค้ด, ทดสอบ และสรุปผล</li>
+              <li>วางแผนงานระยะยาว พร้อมปรับแผนเมื่อเงื่อนไขหรือข้อมูลเปลี่ยน</li>
+              <li>แยก “ความสามารถของโมเดล” ออกจาก “สิทธิ์ในการลงมือทำจริง”</li>
+            </ul>
+            <div class="forecast-examples">
+              <span>Cross-domain Engineer</span>
+              <span>Research Agent</span>
+              <span>Long-horizon Planner</span>
+            </div>
+          </article>
+
+          <article class="forecast-card">
+            <div class="forecast-index">01</div>
+            <h3>Reliable AI Agents</h3>
+            <ul>
+              <li>วัดผลด้วย task completion rate, error rate และ cost per task</li>
+              <li>Agent ทำงานภายใต้ scope, budget และ permission ที่กำหนด</li>
+              <li>มี retry, fallback, escalation และ human approval</li>
+            </ul>
+            <div class="forecast-examples">
+              <span>IT Helpdesk Agent</span>
+              <span>Code Review Agent</span>
+              <span>Procurement Agent</span>
+            </div>
+          </article>
+
+          <article class="forecast-card">
+            <div class="forecast-index">02</div>
+            <h3>Hybrid Cloud + Edge</h3>
+            <ul>
+              <li>Cloud สำหรับ reasoning, simulation และงานที่ใช้ compute สูง</li>
+              <li>Edge model สำหรับ latency ต่ำ ข้อมูลอ่อนไหว หรืออุปกรณ์หน้างาน</li>
+              <li>เลือก routing ตาม cost, performance และ data residency</li>
+            </ul>
+            <div class="forecast-examples">
+              <span>Factory Vision AI</span>
+              <span>Vehicle AI</span>
+              <span>Offline Assistant</span>
+            </div>
+          </article>
+
+          <article class="forecast-card">
+            <div class="forecast-index">03</div>
+            <h3>Digital Twin Operations</h3>
+            <ul>
+              <li>เชื่อม AI กับ sensor, vision, historian และ simulation model</li>
+              <li>ใช้เพื่อ predictive maintenance และ quality inspection</li>
+              <li>คำสั่งสู่ระบบจริงต้องผ่าน safety interlock</li>
+            </ul>
+            <div class="forecast-examples">
+              <span>Digital Twin</span>
+              <span>Predictive Maintenance</span>
+              <span>Smart Factory</span>
+            </div>
+          </article>
+
+          <article class="forecast-card">
+            <div class="forecast-index">04</div>
+            <h3>Governance by Design</h3>
+            <ul>
+              <li>Policy-as-code, role-based access และ tool permission</li>
+              <li>เก็บ audit trail ของ prompt, context และ tool call</li>
+              <li>ทำ continuous evaluation แบบ DevOps/SRE</li>
+            </ul>
+            <div class="forecast-examples">
+              <span>Model Monitoring</span>
+              <span>Prompt Evaluation</span>
+              <span>AI Audit Trail</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="agi-note">
+          <strong>Engineering principle:</strong>
+          แม้ระบบจะมีความสามารถระดับ AGI การดำเนินการที่กระทบความปลอดภัย การเงิน
+          คุณภาพการผลิต หรือโครงสร้างพื้นฐาน ต้องมี
+          <strong>policy boundary, human override, rollback และ auditability</strong> เสมอ
+        </div>
+
+        <div class="closing">
+          <div class="closing-year">2026 → 2027</div>
+          <p>
+            <strong>AGI-era assumption:</strong> AI สามารถใช้เหตุผลและทำงานข้ามโดเมนได้มากขึ้น<br />
+            <strong>Engineering requirement:</strong> Reliable + Observable + Governed + Human-Controllable
+          </p>
+        </div>
+
+        <div class="speaker-notes">
+          <div class="notes-header">
+            <h3 class="notes-title">Speaker Notes / Slide 3</h3>
+            <span class="time-badge">~ 60–75 วินาที</span>
+          </div>
+          <p><strong>เกริ่น:</strong> “ในสไลด์นี้ เราตั้งสมมติฐานเชิงกลยุทธ์ว่า AI มีความสามารถทำงานข้ามโดเมนระดับสูง หรือเข้าสู่ยุค AGI แล้ว”</p>
+          <p>แต่ความสามารถของโมเดลไม่เท่ากับความพร้อมในการใช้งานใน production โดยเฉพาะในโรงงาน ระบบการเงิน หรือระบบที่กระทบความปลอดภัย</p>
+          <p>ดังนั้นระบบต้องมีขอบเขตสิทธิ์ มีงบประมาณและเวลาสำหรับ agent มีการตรวจสอบทุก tool call และมีมนุษย์เข้ามาอนุมัติหรือหยุดระบบได้เสมอ</p>
+          <p><strong>ส่งต่อ:</strong> “เมื่อเข้าใจหลักการควบคุมแล้ว ขั้นต่อไปคือเลือกโมเดลให้เหมาะกับประเภทงาน ไม่ใช่ใช้โมเดลเดียวกับทุก use case”</p>
+        </div>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide" data-slide="3">
+        <div class="eyebrow" style="color: var(--orange);">04 / Model Selection by Work Type</div>
+
+        <h1>
+          AI Models for <span class="accent-orange">Real Work</span>:<br />
+          Select by Task, Data, Risk & Deployment
+        </h1>
+
+        <p class="lead">
+          ไม่มีโมเดลเดียวที่เหมาะกับทุกงาน การเลือกควรพิจารณาความสามารถด้านภาษาและเหตุผล
+          การรองรับภาพหรือวิดีโอ ความเป็นส่วนตัวของข้อมูล ต้นทุน ความเร็ว และความสามารถในการติดตั้งในองค์กร
+        </p>
+
+        <div class="selection-principle">
+          <div class="principle">
+            <strong>QUALITY</strong>
+            <span>ความแม่นยำ เหตุผล และคุณภาพของผลลัพธ์</span>
+          </div>
+          <div class="principle">
+            <strong>DATA</strong>
+            <span>ข้อมูลอ่อนไหว ข้อกำหนด PDPA และ data residency</span>
+          </div>
+          <div class="principle">
+            <strong>LATENCY</strong>
+            <span>ความเร็วตอบสนอง งาน real-time และ edge deployment</span>
+          </div>
+          <div class="principle">
+            <strong>COST</strong>
+            <span>งบ API, token, compute และการใช้งานในปริมาณมาก</span>
+          </div>
+        </div>
+
+        <div class="usecase-grid">
+          <article class="usecase-card">
+            <div class="usecase-icon">01</div>
+            <h3>Social Media Content</h3>
+            <p>คิดแนวคิด สร้าง caption, script, infographic, ภาพประกอบ และปรับเนื้อหาหลายภาษา</p>
+            <div class="model-tags">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span>Gemini Family</span>
+              <span class="image">Image / Video Models</span>
+            </div>
+            <div class="recommendation"><strong>ตัวอย่างงาน:</strong> content calendar, ad copy, short-video script, campaign variation</div>
+          </article>
+
+          <article class="usecase-card">
+            <div class="usecase-icon">02</div>
+            <h3>Organization Management</h3>
+            <p>สรุปรายงาน ประชุม วิเคราะห์เอกสาร สร้าง policy draft และตอบคำถามจาก knowledge base ภายใน</p>
+            <div class="model-tags">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span>Gemini Family</span>
+              <span class="open">Llama / Qwen</span>
+            </div>
+            <div class="recommendation"><strong>ตัวอย่างงาน:</strong> executive brief, meeting minutes, RAG knowledge assistant</div>
+          </article>
+
+          <article class="usecase-card">
+            <div class="usecase-icon">03</div>
+            <h3>Planning & PMO</h3>
+            <p>แตกงาน สร้าง roadmap ระบุ dependency วิเคราะห์ความเสี่ยง และติดตาม action item</p>
+            <div class="model-tags">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span>Gemini Family</span>
+              <span class="open">Qwen</span>
+            </div>
+            <div class="recommendation"><strong>ตัวอย่างงาน:</strong> WBS, RAID log, project charter, scenario planning</div>
+          </article>
+
+          <article class="usecase-card">
+            <div class="usecase-icon">04</div>
+            <h3>Architecture Design</h3>
+            <p>ออกแบบ solution architecture วิเคราะห์ trade-off สร้าง API contract และทำเอกสารระบบ</p>
+            <div class="model-tags">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span>Gemini Family</span>
+              <span class="open">DeepSeek / Qwen</span>
+            </div>
+            <div class="recommendation"><strong>ตัวอย่างงาน:</strong> C4 diagram draft, ADR, API specification, threat-model checklist</div>
+          </article>
+
+          <article class="usecase-card">
+            <div class="usecase-icon">05</div>
+            <h3>Engineering Design</h3>
+            <p>เขียนและ review code วิเคราะห์ log สร้าง test case ช่วย debug และเชื่อม workflow ของ DevOps</p>
+            <div class="model-tags">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span class="open">Qwen Coder</span>
+              <span class="open">DeepSeek Coder</span>
+            </div>
+            <div class="recommendation"><strong>ตัวอย่างงาน:</strong> code review, unit test, CI/CD troubleshooting, SQL generation</div>
+          </article>
+
+          <article class="usecase-card">
+            <div class="usecase-icon">06</div>
+            <h3>Education & Research</h3>
+            <p>อธิบายบทเรียน สร้างแบบฝึกหัด สรุป literature ช่วยเขียนโครงร่างวิจัย และวิเคราะห์ข้อมูลเบื้องต้น</p>
+            <div class="model-tags">
+              <span>GPT Family</span>
+              <span>Claude Family</span>
+              <span>Gemini Family</span>
+              <span class="open">Llama / Mistral</span>
+            </div>
+            <div class="recommendation"><strong>ตัวอย่างงาน:</strong> tutor, quiz generator, literature matrix, research proposal draft</div>
+          </article>
+        </div>
+
+        <div class="quote">
+          MODEL SELECTION RULE — Start with the workflow and risk profile, then choose the model.
+        </div>
+
+        <div class="speaker-notes">
+          <div class="notes-header">
+            <h3 class="notes-title">Speaker Notes / Slide 4</h3>
+            <span class="time-badge">~ 60–75 วินาที</span>
+          </div>
+          <p><strong>เกริ่น:</strong> “สไลด์สุดท้ายเป็นมุมมองการเลือกโมเดลตามประเภทงาน แทนที่จะถามว่าโมเดลไหนดีที่สุดโดยรวม”</p>
+          <p>งาน social media ควรเน้นความคิดสร้างสรรค์และ multimodal ขณะที่งานบริหารควรเน้นการสรุปเอกสาร การเชื่อม knowledge base และการกำกับสิทธิ์ข้อมูล</p>
+          <p>งานวางแผน สถาปัตยกรรม และวิศวกรรม ควรทดสอบ reasoning, coding, context length และ tool use ส่วนงานการศึกษาและวิจัยต้องตรวจสอบแหล่งอ้างอิง ไม่ใช้ AI แทนการยืนยันข้อเท็จจริง</p>
+          <p><strong>บทสรุป:</strong> “เริ่มจาก workflow และระดับความเสี่ยง เลือกโมเดล ทดสอบกับชุดงานจริง แล้วจึงออกแบบ governance และ integration ให้ครบวงจร”</p>
+        </div>
+      </section>
+    </main>
+
+    <button id="notesToggleBtn" class="notes-toggle" aria-expanded="false">
+      🗒 Speaker Notes
+    </button>
+
+    <footer>
+      <div class="hint">คีย์ลัด: ← → เปลี่ยนสไลด์ · Home กลับสไลด์แรก · N เปิด/ปิด Notes · P พิมพ์ PDF</div>
+
+      <div class="controls">
+        <button id="homeBtn" class="home-btn" aria-label="กลับไปสไลด์แรก">⌂ HOME</button>
+        <button id="prevBtn" aria-label="สไลด์ก่อนหน้า">← ก่อนหน้า</button>
+        <button id="nextBtn" aria-label="สไลด์ถัดไป">ถัดไป →</button>
+        <button id="printBtn" class="print-btn" aria-label="ส่งออกหรือพิมพ์เป็น PDF">⎙ PDF / Print</button>
+        <button id="fullscreenBtn" aria-label="เต็มหน้าจอ">⛶</button>
+      </div>
+    </footer>
+
+    <div class="progress-track">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const currentSlideText = document.getElementById("currentSlide");
+    const progressBar = document.getElementById("progressBar");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const homeBtn = document.getElementById("homeBtn");
+    const printBtn = document.getElementById("printBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const notesToggleBtn = document.getElementById("notesToggleBtn");
+    const themeButtons = [...document.querySelectorAll(".theme-btn")];
+
+    let current = 0;
+    let notesOpen = false;
+
+    const savedTheme = localStorage.getItem("ai-presentation-theme") || "engineering";
+
+    function getCurrentNotes() {
+      return slides[current].querySelector(".speaker-notes");
+    }
+
+    function setTheme(themeName) {
+      document.body.setAttribute("data-theme", themeName);
+
+      themeButtons.forEach((button) => {
+        const isActive = button.dataset.theme === themeName;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+
+      localStorage.setItem("ai-presentation-theme", themeName);
+    }
+
+    function updateNotesUI() {
+      slides.forEach((slide) => {
+        const notes = slide.querySelector(".speaker-notes");
+        if (notes) notes.classList.remove("open");
+      });
+
+      const currentNotes = getCurrentNotes();
+
+      if (notesOpen && currentNotes) {
+        currentNotes.classList.add("open");
+        notesToggleBtn.innerHTML = "✕ ซ่อน Speaker Notes";
+        notesToggleBtn.setAttribute("aria-expanded", "true");
+      } else {
+        notesToggleBtn.innerHTML = "🗒 Speaker Notes";
+        notesToggleBtn.setAttribute("aria-expanded", "false");
+      }
+    }
+
+    function updateUI() {
+      currentSlideText.textContent = String(current + 1).padStart(2, "0");
+      progressBar.style.width = `${((current + 1) / slides.length) * 100}%`;
+
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slides.length - 1;
+      nextBtn.textContent = current === slides.length - 1 ? "จบการนำเสนอ" : "ถัดไป →";
+    }
+
+    function goToSlide(nextIndex) {
+      if (nextIndex < 0 || nextIndex >= slides.length || nextIndex === current) return;
+
+      const direction = nextIndex > current ? 1 : -1;
+      const oldSlide = slides[current];
+      const newSlide = slides[nextIndex];
+
+      oldSlide.classList.remove("active");
+      oldSlide.classList.toggle("exit-left", direction > 0);
+
+      newSlide.classList.remove("exit-left");
+      newSlide.classList.add("active");
+
+      current = nextIndex;
+      updateUI();
+      updateNotesUI();
+
+      setTimeout(() => {
+        slides.forEach((slide, index) => {
+          if (index !== current) slide.classList.remove("exit-left");
+        });
+      }, 450);
+    }
+
+    function exportToPDF() {
+      const previousNotesState = notesOpen;
+
+      // ซ่อน Notes ก่อนพิมพ์เสมอ
+      notesOpen = false;
+      updateNotesUI();
+
+      setTimeout(() => {
+        window.print();
+
+        // คืนสถานะ Notes หลังปิดหน้าต่าง Print
+        window.onafterprint = () => {
+          notesOpen = previousNotesState;
+          updateNotesUI();
+          window.onafterprint = null;
+        };
+      }, 150);
+    }
+
+    prevBtn.addEventListener("click", () => goToSlide(current - 1));
+    nextBtn.addEventListener("click", () => goToSlide(current + 1));
+    homeBtn.addEventListener("click", () => goToSlide(0));
+    printBtn.addEventListener("click", exportToPDF);
+
+    notesToggleBtn.addEventListener("click", () => {
+      notesOpen = !notesOpen;
+      updateNotesUI();
+
+      if (notesOpen) {
+        setTimeout(() => {
+          getCurrentNotes()?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+        }, 50);
+      }
+    });
+
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setTheme(button.dataset.theme);
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.target.matches("input, textarea, select")) return;
+
+      if (["ArrowRight", " ", "PageDown"].includes(event.key)) {
+        event.preventDefault();
+        goToSlide(current + 1);
+      }
+
+      if (["ArrowLeft", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        goToSlide(current - 1);
+      }
+
+      if (event.key === "Home") {
+        event.preventDefault();
+        goToSlide(0);
+      }
+
+      if (event.key === "End") {
+        event.preventDefault();
+        goToSlide(slides.length - 1);
+      }
+
+      if (event.key.toLowerCase() === "n") {
+        notesOpen = !notesOpen;
+        updateNotesUI();
+      }
+
+      if (event.key.toLowerCase() === "p") {
+        event.preventDefault();
+        exportToPDF();
+      }
+    });
+
+    fullscreenBtn.addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (error) {
+        console.warn("Fullscreen is not available.", error);
+      }
+    });
+
+    setTheme(savedTheme);
+    updateUI();
+    updateNotesUI();
+  </script>
+</body>
+</html>
